@@ -6,22 +6,26 @@ app.use(morgan('common'));
 
 let topMovies = [
     {
-        name: 'There Will Be Blood',
-        director: 'Paul Thomas Anderson'
+        name: 'Movie 1',
+        director: 'Director 1'
     },
     {
-        name: 'Grand Budapest Hotel',
-        director: 'Wes Anderson'
+        name: 'Movie 2',
+        director: 'Director 2'
     },
     {
-        name: 'Nice Guys',
-        director: 'Shane Black'
+        name: 'Movie 3',
+        director: 'Director 3'
     }
 ];
 
 app.get('/movies', (req, res) => {
-    res.send('Hi, Watch These Movies!');
+    res.json(topMovies);
 });
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the Myflix app');
+}); 
 
 app.use(express.static('public'));
 
