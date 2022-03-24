@@ -2,7 +2,7 @@
   "name": "movie_api",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "main": "server.js",
   "keywords": [],
@@ -13,7 +13,9 @@
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
     "lodash": "^4.17.21",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^8.11.0"
