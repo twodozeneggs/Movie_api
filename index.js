@@ -16,17 +16,17 @@ mongoose.connect('mongodb://localhost:27017/test', {
   useUnifiedTopology: true 
 });
 
-// const res = require('express/lib/response');
-// const req = require('express/lib/request');
+const res = require('express/lib/response');
+const req = require('express/lib/request');
 
 
 app.use(bodyparser.json());
 app.use(morgan('common'));
 app.use(bodyparser.urlencoded({ extended: true }));
-// let auth = require('./auth')(app);
-// const passport = require('passport');
+let auth = require('./auth')(app);
+const passport = require('passport');
 
-// require('./passport');
+require('./passport');
 
 
 app.get ('/', (req,res) => {
@@ -37,7 +37,7 @@ app.get('/test', function(req, res, next){
   res.render('test'); // This should have a view
 });
 
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session : false}), (req, res) => {
   Movies.find()
     .then ((movie) =>{
       res.status(201).json(movie);
@@ -48,7 +48,7 @@ app.get('/movies', (req, res) => {
     });
 });
   
-app.get('/users', function (req,res) {
+app.get('/users', passport.authenticate('jwt', { session : false}), function (req,res) {
   Users.find()
   .then(function (users) {
   res.status(201).json(users);
