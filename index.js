@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const bodyparser = require('body-parser');
 const uuid = require('uuid');
 
+const { check, validationResult } = require ('express-validator');
+
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Grenre;
@@ -23,6 +25,10 @@ const req = require('express/lib/request');
 app.use(bodyparser.json());
 app.use(morgan('common'));
 app.use(bodyparser.urlencoded({ extended: true }));
+
+const cors = require('cors');
+app.use(cors());
+
 let auth = require('./auth')(app);
 const passport = require('passport');
 
@@ -119,7 +125,19 @@ app.get('/director/:Name', (req,res) => {
   });
 });
 
-app.post('/users', (req,res) => {
+app.post('/users', [
+  check('Username', 'Username is required').isLength({min:5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required.').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], 
+(req,res) => {
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({errors: errors.array() });
+  }
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
@@ -128,7 +146,7 @@ app.post('/users', (req,res) => {
       Users
         .create({
           Username: req.body.Username, 
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email, 
           Birthday: req.body.Birthday
         })
@@ -197,11 +215,11 @@ app.delete('/users/:Username/movies/:MovieID', (req,res) => {
   });
 });
 
-app.listen(8080, () => {
-  console.log(`Example app listening on port`)
-})
 
-
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});
 
 
 
