@@ -13,7 +13,12 @@ const Genres = Models.Grenre;
 const Directors = Models.Director;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/test', { 
+//mongoose.connect('mongodb://localhost:27017/myflixdb', { 
+  useNewUrlParser: true, 
+  //useUnifiedTopology: true 
+//});
+
+mongoose.connect('process.env.CONNECTION_URI', { 
   useNewUrlParser: true, 
   useUnifiedTopology: true 
 });
