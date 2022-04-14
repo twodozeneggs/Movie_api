@@ -10,7 +10,7 @@ let movieSchema = mongoose.Schema({
     },
     Director: {
         Name: String, 
-        Bio: String
+        Bio: String,
     },
     Actors: [String],
     ImagePath: String, 
@@ -25,7 +25,7 @@ let userSchema = mongoose.Schema({
     FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
 });
 
-userSchema.statistics.hashPassword = (password) => {
+userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };
 
