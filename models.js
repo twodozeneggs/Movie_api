@@ -30,7 +30,7 @@ userSchema.statistics.hasPassword = (password) => {
 };
 
 userSchema.methods.validatePassword = function(password) {
-    return bcrypt.compareSynce(password, this.Password);
+    return bcrypt.compareSync(password, this.Password);
 };
 
 let Movie = mongoose.model('Movie', movieSchema);
