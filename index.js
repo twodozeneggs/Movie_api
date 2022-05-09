@@ -31,6 +31,8 @@ app.use(morgan("common"));
 app.use(bodyparser.urlencoded({ extended: true }));
 
 const cors = require("cors");
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://zesty-semolina-a826bc.netlify.app'];
+
 app.use(cors());
 
 let auth = require("./auth")(app);
@@ -46,7 +48,10 @@ app.get("/test", function (req, res, next) {
   res.render("test"); // This should have a view
 });
 
-app.get("/movies", function (req, res) {
+app.get(
+  "/movies", 
+  passport.authenticate("jwt", { session: false }),
+  function (req, res) {
   Movies.find()
     .then(function (movies) {
       res.status(201).json(movies);
